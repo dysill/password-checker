@@ -1,3 +1,4 @@
+import bcrypt
 def check_password(password):
     """
     Takes a string and returns true if it is a valid password.
@@ -33,3 +34,29 @@ def check_password(password):
     else:
         return False
 
+def hash_password(password):
+    """
+    Uses bcrypt library to generate and return the hashed password
+    """
+    salt = bcrypt.gensalt(rounds=12)
+    return bcrypt.hashpw(password.encode('utf-8'), salt)
+
+def main():
+    print('A valid password must:\n\t-Be at least 12 characters long')
+    print('\t-Contain at least one lowercase letter (a-z)\n\t-Contain at least one uppercase letter (A-Z)')
+    print('\t-Contain at least one number (0-9)\n\t-Contain at least one symbol (!-))\n')
+
+    password = ''
+    while (password != '0'):
+        password = input('Enter a password (or enter 0 to terminate): ')
+        if password == '0':
+            return
+        elif check_password(password):
+            print(f'\nYour password {password} is valid!')
+            print(f'Your encrypted password: {hash_password(password)}')
+            return
+        else:
+            print(f'Invalid password.')
+
+if __name__ == '__main__':
+    main()
